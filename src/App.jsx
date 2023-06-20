@@ -67,10 +67,12 @@ function SignOut() {
 
 function ChatRoom() {
   const dummy = useRef();
-  const userMessages = firestore.collection('userMessages');
-  const query = userMessages.orderBy('createdAt').limit(25);
+const userMessages = firestore.collection('userMessages');
+  const AiMessages = firestore.collection('AiMessages');
+  const queryUserMessages = userMessages.orderBy('createdAt').limit(25);
+  const queryAiMessages = AiMessages.orderBy('createdAt').limit(25)
 
-  const [messages] = useCollectionData(query, { idField: 'id' });
+  const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
 
