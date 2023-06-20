@@ -10,13 +10,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 firebase.initializeApp({
-apiKey: "AIzaSyBjbLv9Hb1wDLAVj9JJWInEddIVCSgv2H0",
-  authDomain: "chatbot-5b91a.firebaseapp.com",
-  projectId: "chatbot-5b91a",
-  storageBucket: "chatbot-5b91a.appspot.com",
-  messagingSenderId: "727998187917",
-  appId: "1:727998187917:web:9280da44263ae25dc595c4"
-
+apiKey: "AIzaSyAKQpdM_rQenTlrNtpeF1M1FMN8KcJtH7A",
+  authDomain: "library-app-38a33.firebaseapp.com",
+  projectId: "library-app-38a33",
+  storageBucket: "library-app-38a33.appspot.com",
+  messagingSenderId: "950037249157",
+  appId: "1:950037249157:web:34927f5a8bd4738cbfbdec"
 })
 
 const auth = firebase.auth();
@@ -68,13 +67,12 @@ function SignOut() {
 
 function ChatRoom() {
   const dummy = useRef();
-  const messagesRef = firestore.collection('messages');
-  const query = messagesRef.orderBy('createdAt').limit(25);
+  const userMessages = firestore.collection('userMessages');
+  const query = userMessages.orderBy('createdAt').limit(25);
 
   const [messages] = useCollectionData(query, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
-
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -83,7 +81,7 @@ function ChatRoom() {
 
     const { uid, photoURL } = auth.currentUser;
 
-    await messagesRef.add({
+    await userMessages.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
