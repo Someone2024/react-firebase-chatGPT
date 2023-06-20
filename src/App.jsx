@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/analytics';
+import Chat from './api/OpenAi'
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -75,13 +76,13 @@ const userMessages = firestore.collection('userMessages');
   const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
+  
+const { uid, photoURL } = auth.currentUser;
 
   const sendMessage = async (e) => {
     e.preventDefault();
     
     setFormValue('');
-
-    const { uid, photoURL } = auth.currentUser;
 
     await userMessages.add({
       text: formValue,
@@ -89,7 +90,19 @@ const userMessages = firestore.collection('userMessages');
       uid,
       photoURL
     })
-
+    
+    dummy.current.scrollIntoView({ behavior: 'smooth' });
+  }
+  
+  const sendAiMessage = () => {
+    
+Chat(formValue).then(async result =>{
+await AiMessages.add({
+      text: result,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      uid,
+    })
+})
     
     dummy.current.scrollIntoView({ behavior: 'smooth' });
   }
