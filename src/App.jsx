@@ -69,77 +69,98 @@ function SignOut() {
 
 function ChatRoom() {
   const dummy = useRef();
-const userMessages = firestore.collection('userMessages');
+  const userMessages = firestore.collection('userMessages');
   const AiMessages = firestore.collection('AiMessages');
   const queryUserMessages = userMessages.orderBy('createdAt').limit(25);
-  const queryAiMessages = AiMessages.orderBy('createdAt').limit(25)
+  const queryAiMessages = AiMessages.orderBy('createdAt').limit(25);
 
   const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
-  
   const [AiMessagesQ] = useCollectionData(queryAiMessages, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
-  
-const { uid, photoURL } = auth.currentUser;
+
+  const { uid, photoURL } = auth.currentUser;
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    
+
     setFormValue('');
 
     await userMessages.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
-      photoURL
-    })
-    sendAiMessage()
-    
+      photoURL,
+      isAi:false
+    });
+
+    sendAiMessage();
+
     dummy.current.scrollIntoView({ behavior: 'smooth' });
-  }
-  
+  };
+
   const sendAiMessage = () => {
-Chat(formValue).then(async result =>{
-await AiMessages.add({
-      text: result,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
-      photoURL: AiPhotoUrl
-    })
-})
-  }
+    Chat(formValue).then(async (result) => {
+      await AiMessages.add({
+        text: result,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        uid,
+        photoURL: AiPhotoUrl,
+        isAi: true
+      });
+    });
+  };
 
-  return (<>
-    <main>
+  // Merge and sort the messages
+  const allMessages = [...(messages || []), ...(AiMessagesQ || [])].sort(
+    (a, b) => a.createdAt?.toDate() - b.createdAt?.toDate()
+  );
 
-      {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-      
-      {AiMessagesQ && AiMessagesQ.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+  return (
+    <>
+      <main>
+        {allMessages.map((msg) => (
+          <ChatMessage key={msg.id} message={msg} />
+        ))}
+        <span ref={dummy}></span>
+      </main>
 
-      <span ref={dummy}></span>
-
-    </main>
-
-    <form>
-
-      <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
-
-      <button onClick={sendMessage} type="submit" disabled={!formValue}>🕊️</button>
-
-    </form>
-  </>)
+      <form>
+        <input
+          value={formValue}
+          onChange={(e) => setFormValue(e.target.value)}
+          placeholder="say something nice"
+        />
+        <button onClick={sendMessage} type="submit" disabled={!formValue}>
+          🕊️
+        </button>
+      </form>
+    </>
+  );
 }
 
 
+
 function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
+  const { text, uid, photoURL, isAi } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
   return (<>
     <div className={`message ${messageClass}`}>
+    {isAi ? 
+    <>
+<p>{text}</p>
       <img src={photoURL} />
+      </>
+      :
+      <>
+      
+      
+<img src={photoURL} />
       <p>{text}</p>
+      </>
+    }
     </div>
   </>)
 }
