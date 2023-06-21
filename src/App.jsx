@@ -74,6 +74,8 @@ const userMessages = firestore.collection('userMessages');
   const queryAiMessages = AiMessages.orderBy('createdAt').limit(25)
 
   const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
+  
+  const [AiMessagesQ] = useCollectionData(queryAiMessages, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
   
@@ -90,12 +92,12 @@ const { uid, photoURL } = auth.currentUser;
       uid,
       photoURL
     })
+    sendAiMessage()
     
     dummy.current.scrollIntoView({ behavior: 'smooth' });
   }
   
   const sendAiMessage = () => {
-    
 Chat(formValue).then(async result =>{
 await AiMessages.add({
       text: result,
@@ -103,24 +105,24 @@ await AiMessages.add({
       uid,
     })
 })
-    
-    dummy.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   return (<>
     <main>
 
       {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+      
+      {AiMessagesQ && AiMessagesQ.map(msg => <ChatMessage key={msg.id} message={msg} />)}
 
       <span ref={dummy}></span>
 
     </main>
 
-    <form onSubmit={sendMessage}>
+    <form>
 
       <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
 
-      <button type="submit" disabled={!formValue}>🕊️</button>
+      <button onClick={sendMessage} type="submit" disabled={!formValue}>🕊️</button>
 
     </form>
   </>)
