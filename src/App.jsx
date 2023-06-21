@@ -22,6 +22,7 @@ apiKey: "AIzaSyAKQpdM_rQenTlrNtpeF1M1FMN8KcJtH7A",
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 const analytics = firebase.analytics();
+const AiPhotoUrl ="https://static.vecteezy.com/system/resources/previews/021/059/825/non_2x/chatgpt-logo-chat-gpt-icon-on-green-background-free-vector.jpg"
 
 
 function App() {
@@ -103,6 +104,7 @@ await AiMessages.add({
       text: result,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
+      photoURL: AiPhotoUrl
     })
 })
   }
@@ -136,7 +138,7 @@ function ChatMessage(props) {
 
   return (<>
     <div className={`message ${messageClass}`}>
-      <img src={photoURL || 'https://api.adorable.io/avatars/23/abott@adorable.png'} />
+      <img src={photoURL} />
       <p>{text}</p>
     </div>
   </>)
