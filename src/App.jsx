@@ -72,7 +72,11 @@ const { uid, photoURL } = auth.currentUser;
   const dummy = useRef();
   const userMessages = firestore.collection('userMessages');
   const AiMessages = firestore.collection('AiMessages');
-  const queryUserMessages = userMessages.orderBy('createdAt').limit(25);
+  const queryUserMessages = userMessages
+  .orderBy('createdAt')
+  .limit(25)
+  .where('uid', '==', uid)
+
   const queryAiMessages = AiMessages.orderBy('createdAt').limit(25);
 
   const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
@@ -88,7 +92,7 @@ const { uid, photoURL } = auth.currentUser;
     await userMessages.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
+      uid: uid,
       photoURL,
       isAi:false
     });
@@ -103,7 +107,7 @@ const { uid, photoURL } = auth.currentUser;
       await AiMessages.add({
         text: result,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        uid,
+        uid: uid,
         photoURL: AiPhotoUrl,
         isAi: true
       });
@@ -131,7 +135,7 @@ const { uid, photoURL } = auth.currentUser;
           placeholder="say something nice"
         />
         <button onClick={sendMessage} type="submit" disabled={!formValue}>
-          🕊️
+          ➡️
         </button>
       </form>
     </>
