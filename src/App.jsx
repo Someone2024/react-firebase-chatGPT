@@ -68,6 +68,7 @@ function SignOut() {
 
 
 function ChatRoom() {
+const { uid, photoURL } = auth.currentUser;
   const dummy = useRef();
   const userMessages = firestore.collection('userMessages');
   const AiMessages = firestore.collection('AiMessages');
@@ -78,8 +79,6 @@ function ChatRoom() {
   const [AiMessagesQ] = useCollectionData(queryAiMessages, { idField: 'id' });
 
   const [formValue, setFormValue] = useState('');
-
-  const { uid, photoURL } = auth.currentUser;
 
   const sendMessage = async (e) => {
     e.preventDefault();
