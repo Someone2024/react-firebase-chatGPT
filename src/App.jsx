@@ -24,7 +24,9 @@ const firestore = firebase.firestore();
 const analytics = firebase.analytics();
 const AiPhotoUrl ="https://static.vecteezy.com/system/resources/previews/021/059/825/non_2x/chatgpt-logo-chat-gpt-icon-on-green-background-free-vector.jpg"
 
-
+const userMessages = firestore.collection('userMessages');
+  const AiMessages = firestore.collection('AiMessages');
+  
 function App() {
 
   const [user] = useAuthState(auth);
@@ -32,7 +34,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>⚛️🔥💬</h1>
+        <h1>ChatGPT</h1>
         <SignOut />
       </header>
 
@@ -70,14 +72,10 @@ function SignOut() {
 function ChatRoom() {
 const { uid, photoURL } = auth.currentUser;
   const dummy = useRef();
-  const userMessages = firestore.collection('userMessages');
-  const AiMessages = firestore.collection('AiMessages');
-  const queryUserMessages = userMessages
-  .orderBy('createdAt')
-  .limit(25)
-  .where('uid', '==', uid)
-
-  const queryAiMessages = AiMessages.orderBy('createdAt').limit(25);
+  
+  const queryUserMessages = userMessages.where('uid', '==', uid).limit(10)
+  
+  const queryAiMessages = AiMessages.orderBy('createdAt').limit(10);
 
   const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
   const [AiMessagesQ] = useCollectionData(queryAiMessages, { idField: 'id' });
@@ -132,10 +130,10 @@ const { uid, photoURL } = auth.currentUser;
         <input
           value={formValue}
           onChange={(e) => setFormValue(e.target.value)}
-          placeholder="say something nice"
+          placeholder="Prompt"
         />
         <button onClick={sendMessage} type="submit" disabled={!formValue}>
-          ➡️
+          Send
         </button>
       </form>
     </>
@@ -168,5 +166,5 @@ function ChatMessage(props) {
   </>)
 }
 
-
+export {userMessages, AiMessages}
 export default App;
