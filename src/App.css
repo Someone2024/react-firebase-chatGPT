@@ -55,7 +55,7 @@ main::-webkit-scrollbar-thumb {
 }
 
 form {
-  height: 10vh;
+  height: 8vh;
   position: fixed;
   bottom: 0;
   background-color: rgb(24, 23, 23);
@@ -67,6 +67,8 @@ form {
 
 form button {
   width: 20%;
+  display: flex;
+  justify-content: center;
   background-color: rgb(56, 56, 143);
 }
 
