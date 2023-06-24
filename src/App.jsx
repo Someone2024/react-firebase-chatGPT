@@ -6,7 +6,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/analytics';
 import Chat from './api/OpenAi'
-
+//import * as admin from 'firebase-admin'; 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
@@ -26,6 +26,10 @@ const AiPhotoUrl ="https://static.vecteezy.com/system/resources/previews/021/059
 
 const userMessages = firestore.collection('userMessages');
   const AiMessages = firestore.collection('AiMessages');
+  
+const userMessagesSnapshot = await firestore.collection('userMessages').get();
+
+const AiMessagesSnapshot = await firestore.collection('AiMessages').get();
   
 function App() {
 
@@ -73,7 +77,7 @@ function ChatRoom() {
 const { uid, photoURL } = auth.currentUser;
   const dummy = useRef();
   
-  const queryUserMessages = userMessages.where('uid', '==', uid).limit(10)
+  const queryUserMessages = userMessages.orderBy('createdAt').limit(10)
   
   const queryAiMessages = AiMessages.orderBy('createdAt').limit(10);
 
@@ -88,7 +92,8 @@ const { uid, photoURL } = auth.currentUser;
     setFormValue('');
 
     await userMessages.add({
-      text: formValue,
+      role:"user",
+      content:formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid: uid,
       photoURL,
@@ -103,7 +108,8 @@ const { uid, photoURL } = auth.currentUser;
   const sendAiMessage = () => {
     Chat(formValue).then(async (result) => {
       await AiMessages.add({
-        text: result,
+        role: "assistant",
+        content: result,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         uid: uid,
         photoURL: AiPhotoUrl,
@@ -143,7 +149,7 @@ const { uid, photoURL } = auth.currentUser;
 
 
 function ChatMessage(props) {
-  const { text, uid, photoURL, isAi } = props.message;
+  const { content, uid, photoURL, isAi } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
@@ -151,7 +157,7 @@ function ChatMessage(props) {
     <div className={`message ${messageClass}`}>
     {isAi ? 
     <>
-<p>{text}</p>
+<p>{content}</p>
       <img src={photoURL} />
       </>
       :
@@ -159,12 +165,12 @@ function ChatMessage(props) {
       
       
 <img src={photoURL} />
-      <p>{text}</p>
+      <p>{content}</p>
       </>
     }
     </div>
   </>)
 }
 
-export {userMessages, AiMessages}
+export {userMessagesSnapshot, AiMessagesSnapshot}
 export default App;
