@@ -1,28 +1,14 @@
 import { Configuration, OpenAIApi } from "openai"
 import  { userMessagesSnapshot, AiMessagesSnapshot} from "../App"
 
-const apiKey ="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"
+const apiKey = "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"
 
 const configuration = new Configuration({
     apiKey: apiKey
 });
 const openai = new  OpenAIApi(configuration)
 
-async function Chat(msg){
-const chat_completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [
-      {role: "system", content: "You are a helpful assistant and your responses should be short  ,consice and to the point."},
-      { role: "user", content: msg }
-      ],
-}).catch((e)=>{
-  alert(e)
-})
-
-return chat_completion.data.choices[0].message.content
-}
-
-async function runConversation(){
+async function runConversation(msg){
 
   function Message(role, content){
     this.role = role
@@ -34,16 +20,34 @@ function addMessage(role, content){
     messages.push(message)
   }
   
-  let messages = []
-  
-  userMessagesSnapshot.forEach(doc=>{
-    addMessage(doc.data().role,doc.data().content)
-  })
-  AiMessagesSnapshot.forEach(doc=>{
-    addMessage(doc.data().role,doc.data().content)
-  })
-  
-  alert(2)
+  let messages = [];
+
+const userMessagesArray = userMessagesSnapshot.docs;
+const aiMessagesArray = AiMessagesSnapshot.docs;
+const maxLength = Math.max(userMessagesArray.length, aiMessagesArray.length);
+
+for (let i = 0; i < maxLength; i++) {
+  if (i < userMessagesArray.length) {
+    const userMessage = userMessagesArray[i];
+    addMessage(userMessage.data().role, userMessage.data().content);
+  }
+  if (i < aiMessagesArray.length) {
+    const aiMessage = aiMessagesArray[i];
+    addMessage(aiMessage.data().role, aiMessage.data().content);
+  }
 }
 
-export default Chat
+  messages.push(new Message("user",msg))
+
+  const chat_completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: messages
+}).catch((e)=>{
+  alert(e)
+})
+
+return chat_completion.data.choices[0].message.content
+}
+
+
+export default runConversation
