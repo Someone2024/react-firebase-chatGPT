@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/analytics';
-import Chat from './api/OpenAi'
+import runConversation from './api/OpenAi'
 //import * as admin from 'firebase-admin'; 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -27,12 +27,11 @@ const AiPhotoUrl ="https://static.vecteezy.com/system/resources/previews/021/059
 const userMessages = firestore.collection('userMessages');
   const AiMessages = firestore.collection('AiMessages');
   
-const userMessagesSnapshot = await firestore.collection('userMessages').get();
+const userMessagesSnapshot = await firestore.collection('userMessages').orderBy("createdAt").get();
 
-const AiMessagesSnapshot = await firestore.collection('AiMessages').get();
+const AiMessagesSnapshot = await firestore.collection('AiMessages').orderBy("createdAt").get();
   
 function App() {
-
   const [user] = useAuthState(auth);
 
   return (
@@ -77,9 +76,9 @@ function ChatRoom() {
 const { uid, photoURL } = auth.currentUser;
   const dummy = useRef();
   
-  const queryUserMessages = userMessages.orderBy('createdAt').limit(10)
+  const queryUserMessages = userMessages.orderBy('createdAt').limit(25)
   
-  const queryAiMessages = AiMessages.orderBy('createdAt').limit(10);
+  const queryAiMessages = AiMessages.orderBy('createdAt').limit(25);
 
   const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
   const [AiMessagesQ] = useCollectionData(queryAiMessages, { idField: 'id' });
@@ -106,7 +105,7 @@ const { uid, photoURL } = auth.currentUser;
   };
 
   const sendAiMessage = () => {
-    Chat(formValue).then(async (result) => {
+    runConversation(formValue).then(async (result) => {
       await AiMessages.add({
         role: "assistant",
         content: result,
