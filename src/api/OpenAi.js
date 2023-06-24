@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from "openai"
-import {userMessages, AiMessages} from "../App"
+import  { userMessagesSnapshot, AiMessagesSnapshot} from "../App"
 
-const apiKey ="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"
+const apiKey ="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"
 
 const configuration = new Configuration({
     apiKey: apiKey
@@ -22,8 +22,28 @@ const chat_completion = await openai.createChatCompletion({
 return chat_completion.data.choices[0].message.content
 }
 
-function runConversation(){
+async function runConversation(){
+
+  function Message(role, content){
+    this.role = role
+    this.content= content
+  }
   
+function addMessage(role, content){
+    const message = new Message(role, content)
+    messages.push(message)
+  }
+  
+  let messages = []
+  
+  userMessagesSnapshot.forEach(doc=>{
+    addMessage(doc.data().role,doc.data().content)
+  })
+  AiMessagesSnapshot.forEach(doc=>{
+    addMessage(doc.data().role,doc.data().content)
+  })
+  
+  alert(2)
 }
 
-export default Chat;
+export default Chat
