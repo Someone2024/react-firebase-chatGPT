@@ -7,6 +7,7 @@ export default defineConfig(() => {
   return {
     build: {
       outDir: 'build',
+      target: 'esnext'      
     },
     plugins: [react({
       jsxRuntime: 'classic'

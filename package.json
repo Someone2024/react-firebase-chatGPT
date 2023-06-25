@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "firebase": "^7.20.0",
+    "firebase-tools": "^12.4.0",
     "openai": "^3.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
