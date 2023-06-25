@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from "openai"
 import  { userMessagesSnapshot, AiMessagesSnapshot} from "../App"
 
-const apiKey = "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"
+const apiKey = "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"
 
 const configuration = new Configuration({
     apiKey: apiKey
