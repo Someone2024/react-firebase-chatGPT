@@ -10,7 +10,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 firebase.initializeApp({
-apiKey: "AIzaSyAKQpdM_rQenTlrNtpeF1M1FMN8KcJtH7A",
+  apiKey: "AIzaSyAKQpdM_rQenTlrNtpeF1M1FMN8KcJtH7A",
   authDomain: "library-app-38a33.firebaseapp.com",
   projectId: "library-app-38a33",
   storageBucket: "library-app-38a33.appspot.com",
@@ -21,15 +21,15 @@ apiKey: "AIzaSyAKQpdM_rQenTlrNtpeF1M1FMN8KcJtH7A",
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 const analytics = firebase.analytics();
-const AiPhotoUrl ="https://static.vecteezy.com/system/resources/previews/021/059/825/non_2x/chatgpt-logo-chat-gpt-icon-on-green-background-free-vector.jpg"
+const AiPhotoUrl = "https://static.vecteezy.com/system/resources/previews/021/059/825/non_2x/chatgpt-logo-chat-gpt-icon-on-green-background-free-vector.jpg"
 
 const userMessages = firestore.collection('userMessages');
-  const AiMessages = firestore.collection('AiMessages');
-  
+const AiMessages = firestore.collection('AiMessages');
+
 const userMessagesSnapshot = await firestore.collection('userMessages').orderBy("createdAt").get();
 
 const AiMessagesSnapshot = await firestore.collection('AiMessages').orderBy("createdAt").get();
-  
+
 function App() {
   const [user] = useAuthState(auth);
 
@@ -72,11 +72,11 @@ function SignOut() {
 
 
 function ChatRoom() {
-const { uid, photoURL } = auth.currentUser;
+  const { uid, photoURL } = auth.currentUser;
   const dummy = useRef();
-  
-  const queryUserMessages = userMessages.where("uid","==",uid).orderBy('createdAt').limit(25)
-  
+
+  const queryUserMessages = userMessages.where("uid", "==", uid).orderBy('createdAt').limit(25)
+
   const queryAiMessages = AiMessages.orderBy('createdAt').limit(25);
 
   const [messages] = useCollectionData(queryUserMessages, { idField: 'id' });
@@ -90,12 +90,12 @@ const { uid, photoURL } = auth.currentUser;
     setFormValue('');
 
     await userMessages.add({
-      role:"user",
-      content:formValue,
+      role: "user",
+      content: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid: uid,
       photoURL,
-      isAi:false
+      isAi: false
     });
 
     sendAiMessage();
@@ -153,22 +153,21 @@ function ChatMessage(props) {
 
   return (<>
     <div className={`message ${messageClass}`}>
-    {isAi ? 
-    <>
-<p>{content}</p>
-      <img src={photoURL} />
-      </>
-      :
-      <>
-      
-      
-<img src={photoURL} />
-      <p>{content}</p>
-      </>
-    }
+      {isAi ?
+        <div className='ai'>
+          <img src={photoURL} />
+          <p>{content}</p>
+          
+        </div>
+        :
+        <div className='user'>
+          <p>{content}</p>
+          <img src={photoURL} />
+        </div>
+      }
     </div>
   </>)
 }
 
-export {userMessagesSnapshot, AiMessagesSnapshot}
+export { userMessagesSnapshot, AiMessagesSnapshot }
 export default App;
