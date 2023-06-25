@@ -168,3 +168,10 @@ img {
 .user {
   justify-content: flex-end;
 }
+
+.signin {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+}
