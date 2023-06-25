@@ -6,7 +6,6 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/analytics';
 import runConversation from './api/OpenAi'
-//import * as admin from 'firebase-admin'; 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
@@ -76,7 +75,7 @@ function ChatRoom() {
 const { uid, photoURL } = auth.currentUser;
   const dummy = useRef();
   
-  const queryUserMessages = userMessages.orderBy('createdAt').limit(25)
+  const queryUserMessages = userMessages.where("uid","==",uid).orderBy('createdAt').limit(25)
   
   const queryAiMessages = AiMessages.orderBy('createdAt').limit(25);
 
