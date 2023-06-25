@@ -10,12 +10,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 firebase.initializeApp({
-  apiKey: "AIzaSyAKQpdM_rQenTlrNtpeF1M1FMN8KcJtH7A",
-  authDomain: "library-app-38a33.firebaseapp.com",
-  projectId: "library-app-38a33",
-  storageBucket: "library-app-38a33.appspot.com",
-  messagingSenderId: "950037249157",
-  appId: "1:950037249157:web:34927f5a8bd4738cbfbdec"
+  apiKey: "AIzaSyDXYcCNs4UkTIe77rP4T-mHhobNZ1fLMNw",
+  authDomain: "chatapp-ec88e.firebaseapp.com",
+  projectId: "chatapp-ec88e",
+  storageBucket: "chatapp-ec88e.appspot.com",
+  messagingSenderId: "780924077899",
+  appId: "1:780924077899:web:5844079899d066ba0f4ace"
 })
 
 const auth = firebase.auth();
@@ -56,10 +56,10 @@ function SignIn() {
   }
 
   return (
-    <>
+    <div className='signin'>
       <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
       <p>Do not violate the community guidelines or you will be banned for life!</p>
-    </>
+    </div>
   )
 
 }
