@@ -19,7 +19,7 @@ To use the React Firebase Chat application, follow these steps:
 1. Visit the deployed application:
 
    ```
-   [Deployed Application](https://your-application-url.com)
+   [Deployed Application] https://6498d48bb48fbc5a7a5849a7--beamish-queijadas-d34adf.netlify.app/
    ```
 
 2. Access the private chat room: Once you access the application, you will be directed to the private chat room where you can interact with ChatGPT.
