@@ -16,11 +16,8 @@ The main feature added to this fork is the integration of ChatGPT into the chat 
 
 To use the React Firebase Chat application, follow these steps:
 
-1. Visit the deployed application:
-
-   ```
-   [Deployed Application] (https://6498d48bb48fbc5a7a5849a7--beamish-queijadas-d34adf.netlify.app/)
-   ```
+1. Visit the deployed application: (https://6498d48bb48fbc5a7a5849a7--beamish-queijadas-d34adf.netlify.app/)
+   
 
 2. Access the private chat room: Once you access the application, you will be directed to the private chat room where you can interact with ChatGPT.
 
