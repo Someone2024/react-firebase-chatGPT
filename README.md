@@ -22,3 +22,4 @@ To use the React Firebase Chat application, follow these steps:
 2. Access the private chat room: Once you access the application, you will be directed to the private chat room where you can interact with ChatGPT.
 
 3. Start the conversation: Type your messages in the input field and press enter to send them. ChatGPT will respond in real-time.
+
