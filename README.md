@@ -1,6 +1,6 @@
 # React Firebase Chat
 
-This repository is a fork of the original repository [react-firebase-chat](https://github.com/fireship-io/react-firebase-chat) created by [fireship-io](https://github.com/fireship-io). The key feature added to this fork is the integration of OpenAI's Language Model (LLM) ChatGPT for real-time communication.
+This repository is a fork of the original repository [react-firebase-chat](https://github.com/fireship-io/react-firebase-chat) created by [fireship-io](https://github.com/fireship-io). The key feature added to this fork is the integration of OpenAI's Language Model (LLM) ChatGPT for real-time communication.  
 
 ## Key Features
 
